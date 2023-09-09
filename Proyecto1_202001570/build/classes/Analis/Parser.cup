@@ -1,0 +1,222 @@
+// ------------  Paquete e importaciones ------------
+package Analis;
+
+import java_cup.runtime.*;
+import java.util.LinkedList;
+
+
+//------> Codigo para el parser
+//------> Declaracion de variables, funciones y funciones de error
+
+parser code 
+{:
+    public static String resultado = ""; 
+
+    public void syntax_error(Symbol s)
+    {
+            System.err.println("Error Sintactico: "+ s.value + " - Fila: " + s.right + " - Columna: " + s.left + ". Recuperado" );
+    }
+
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception
+    {
+            System.err.println("Error Sintactico: "+ s.value + " - Fila: " + s.right + " - Columna: " + s.left + ". Sin recuperacion." );
+    }
+
+:}
+
+
+//------> Codigo para las acciones gramaticales (no tocar)
+action code
+{:  :}
+
+
+//------> Declaración de terminales
+terminal String ENTERO;
+terminal String POR, MAS,MENOS,DIVISION;
+terminal String PARENTESIS_A, PARENTESIS_C, LLAVE_A, LLAVE_C,IGUAL;
+terminal String MOSTRAR, IF;
+terminal String PUNTOYCOMA;
+terminal String IDENTI,INT,DOUBLE,CHAR,BOOL,STRING;
+terminal String DOUBLEN,LETRA,TRUE,FALSE,CADENA;
+terminal String COMENLI,COMENMULTILI;
+
+
+//------> Declaración de no terminales
+non terminal inicio;
+non terminal LinkedList lista_instr;
+non terminal instruccion;
+non terminal expresion;
+non terminal instr_mostrar, if,declara,declaraig,comentarios,comentariosl;
+non terminal declaradou ,declaraigdou;
+non terminal declaracha ,declaraigcha;
+non terminal declarabol ,declaraigbol;
+non terminal declaracade ,declaraigcade;
+
+// ------> Precedencia
+precedence left MAS;
+precedence left POR;
+precedence left MENOS;
+precedence left DIVISION;
+
+//------> Definir Simbolo Inicial
+start with inicio; 
+
+
+// ------------>  Producciones  <------------
+
+inicio ::= lista_instr:lista {: func.Funcion.traduccion = lista; :}
+;
+
+
+
+lista_instr ::= lista_instr:lista instruccion:val
+        {: 
+            lista.addAll((LinkedList) val);
+            RESULT = (LinkedList) lista;
+        :}
+
+    | instruccion:val
+        {: 
+            LinkedList<String> lista = new LinkedList<>();
+            lista.addAll((LinkedList) val);
+            RESULT = (LinkedList) lista;
+        :}
+;
+
+
+
+instruccion ::= instr_mostrar:val {: RESULT = val; :}
+    | if:val    {: RESULT = val; :}
+    | declara:val  {: RESULT = val; :}
+    | declaraig:val  {: RESULT = val; :}
+    | declaradou:val  {: RESULT = val; :}
+    | declaraigdou:val  {: RESULT = val; :}
+    | declaracha:val  {: RESULT = val; :}
+    | declaraigcha:val  {: RESULT = val; :}
+    | declarabol:val  {: RESULT = val; :}
+    | declaraigbol:val  {: RESULT = val; :}
+    | declaracade:val  {: RESULT = val; :}
+    | declaraigcade:val  {: RESULT = val; :}
+    | comentarios:val  {: RESULT = val; :}
+    | comentariosl:val  {: RESULT = val; :}
+    
+;
+
+comentarios ::= COMENMULTILI:val  
+            {: 
+                LinkedList<String> lista = new LinkedList<>();
+                lista.add("comentario multilenea: "+val+"\n"); 
+                RESULT = lista;
+            :}
+;
+comentariosl ::= COMENLI:val  
+            {: 
+                LinkedList<String> lista = new LinkedList<>();
+                lista.add("comentario una linea: "+val+"\n"); 
+                RESULT = lista;
+            :}
+;
+
+
+if ::= IF PARENTESIS_A expresion:exp PARENTESIS_C LLAVE_A lista_instr:inst LLAVE_C 
+    {:
+        LinkedList<String> lista = new LinkedList<>();
+        lista.add("if "+ exp + ":");
+
+        func.Funcion.contador++;
+        lista.addAll(func.Funcion.tabulaciones(inst));
+        func.Funcion.contador--;
+
+        RESULT = lista;
+    :}
+;
+
+instr_mostrar ::= MOSTRAR PARENTESIS_A expresion:val PARENTESIS_C PUNTOYCOMA   
+            {: 
+                LinkedList<String> lista = new LinkedList<>();
+                lista.add("print("+val+")"); 
+                RESULT = lista;
+            :}
+;
+declara ::= INT expresion:val PUNTOYCOMA     
+            {: 
+                LinkedList<String> lista = new LinkedList<>();
+                lista.add("var "+val+"\n"); 
+                RESULT = lista;
+            :}
+;
+declaraig ::= INT expresion:exp IGUAL expresion:val PUNTOYCOMA   
+            {: 
+                LinkedList<String> lista = new LinkedList<>();
+                lista.add(exp+"="+val+"\n"); 
+                RESULT = lista;
+            :}
+;
+declaradou ::= DOUBLE expresion:val PUNTOYCOMA     
+            {: 
+                LinkedList<String> lista = new LinkedList<>();
+                lista.add("var "+val+"\n"); 
+                RESULT = lista;
+            :}
+;
+declaraigdou ::= DOUBLE expresion:exp IGUAL expresion:val PUNTOYCOMA   
+            {: 
+                LinkedList<String> lista = new LinkedList<>();
+                lista.add(exp+"="+val+"\n"); 
+                RESULT = lista;
+            :}
+;
+declaracha ::= CHAR expresion:val PUNTOYCOMA     
+            {: 
+                LinkedList<String> lista = new LinkedList<>();
+                lista.add("var "+val+"\n"); 
+                RESULT = lista;
+            :}
+;
+declaraigcha ::= CHAR expresion:exp IGUAL expresion:val PUNTOYCOMA   
+            {: 
+                LinkedList<String> lista = new LinkedList<>();
+                lista.add(exp+"="+val+"\n"); 
+                RESULT = lista;
+            :}
+;
+declarabol ::= BOOL expresion:val PUNTOYCOMA     
+            {: 
+                LinkedList<String> lista = new LinkedList<>();
+                lista.add("var "+val+"\n"); 
+                RESULT = lista;
+            :}
+;
+declaraigbol ::= BOOL expresion:exp IGUAL expresion:val PUNTOYCOMA   
+            {: 
+                LinkedList<String> lista = new LinkedList<>();
+                lista.add(exp+"="+val+"\n"); 
+                RESULT = lista;
+            :}
+;
+declaracade ::= STRING expresion:val PUNTOYCOMA     
+            {: 
+                LinkedList<String> lista = new LinkedList<>();
+                lista.add("var "+val+"\n"); 
+                RESULT = lista;
+            :}
+;
+declaraigcade ::= STRING expresion:exp IGUAL expresion:val PUNTOYCOMA   
+            {: 
+                LinkedList<String> lista = new LinkedList<>();
+                lista.add(exp+"="+val+"\n"); 
+                RESULT = lista;
+            :}
+;
+
+expresion ::= expresion:a POR expresion:b  {: RESULT = a.toString()+"*"+b.toString() ; :}
+    | expresion:a MAS expresion:b          {: RESULT = a.toString()+"+"+b.toString() ; :}
+    | expresion:a MENOS expresion:b        {: RESULT = a.toString()+"-"+b.toString() ; :}
+    | expresion:a DIVISION expresion:b     {: RESULT = a.toString()+"/"+b.toString() ; :}
+    | ENTERO:val                           {: RESULT = val; :}
+    | IDENTI:val                           {: RESULT = val; :}
+    | DOUBLEN:val                          {: RESULT = val; :}
+    | TRUE:val                          {: RESULT = val; :}
+    | FALSE:val                          {: RESULT = val; :}
+    | CADENA:val                          {: RESULT = val; :}
+;
