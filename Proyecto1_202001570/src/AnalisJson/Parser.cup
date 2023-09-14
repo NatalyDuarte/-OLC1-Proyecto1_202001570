@@ -1,0 +1,87 @@
+    
+// ------------  Paquete e importaciones ------------
+package AnalisJson;
+
+import java_cup.runtime.*;
+import java.util.LinkedList;
+
+//------> Codigo para el parser
+//------> Declaracion de variables, funciones y funciones de error
+
+parser code 
+{:
+    public static String resultado = ""; 
+
+    public void syntax_error(Symbol s)
+    {
+        System.err.println("Error Sintactico: "+ s.value + " - Fila: " + s.right + " - Columna: " + s.left + ". Recuperado" );
+        data.Info.listaErrores.add(new data.Error("Error Sintactico", "No reconocido " + s.value , s.right , s.left ));
+    }
+
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception
+    {
+        System.err.println("Error Sintactico: "+ s.value + " - Fila: " + s.right + " - Columna: " + s.left + ". Sin recuperacion." );
+        data.Info.listaErrores.add(new data.Error("Error Sintactico", "No reconocido " + s.value , s.right , s.left ));
+    }
+
+:}
+
+
+
+
+
+//------> Codigo para las acciones gramaticales (no tocar)
+action code
+{:  :}
+
+
+//------> Declaración de terminales
+terminal String CADENA;
+terminal String CADEN;
+terminal String COMA;
+terminal String DOUBLEN;
+terminal String LLAVE_A;
+terminal String LLAVE_C;
+terminal String DOSPUNTOS;
+terminal String COMENLI;
+terminal String COMENMULTILI;
+
+//------> Declaración de no terminales
+non terminal inicio;
+non terminal asignacion;
+non terminal lista_instr;
+non terminal instruccion;
+non terminal expresion;
+non terminal instrucjson;
+
+//------> Definir Simbolo Inicial
+start with inicio; 
+
+
+// ------------>  Producciones  <------------
+
+inicio ::= lista_instr
+;
+
+lista_instr ::= lista_instr instruccion
+    | instruccion
+;
+
+instruccion ::=  LLAVE_A instrucjson LLAVE_C 
+    | COMENMULTILI
+    | COMENLI
+;
+
+instrucjson ::= instrucjson COMA asignacion 
+    | asignacion
+;
+
+asignacion ::= CADENA:nombre DOSPUNTOS expresion:var  
+        {: data.Info.listaVariables.put(nombre.toString(), var.toString()); :}
+;
+
+expresion ::=  DOUBLEN:val                     {: RESULT = val; :}
+    | CADEN:val                                {: RESULT = val; :}
+    | CADENA:val                               {: RESULT = data.Info.listaVariables.get(val); :}
+;
+

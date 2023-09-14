@@ -314,7 +314,7 @@ public class Principal extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         String conte = jTextArea1.getText();
         System.out.println(conte);
-        analizar(conte);
+        analizarJson(conte);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -422,6 +422,17 @@ public class Principal extends javax.swing.JFrame {
             Analis.Lexer lexer = new Analis.Lexer(new StringReader(entrada)); 
             Analis.Parser parser = new Analis.Parser(lexer);
             parser.parse();
+        } catch (Exception e) {
+            System.out.println("Error fatal en compilación de entrada.");
+            System.out.println(e);
+        } 
+    } 
+      // Realizar AnalisisJSON
+    public static void analizarJson (String entrada){
+        try {
+            AnalisJson.Lexer lexers = new AnalisJson.Lexer(new StringReader(entrada)); 
+            AnalisJson.Parser parsers = new AnalisJson.Parser(lexers);
+            parsers.parse();
         } catch (Exception e) {
             System.out.println("Error fatal en compilación de entrada.");
             System.out.println(e);

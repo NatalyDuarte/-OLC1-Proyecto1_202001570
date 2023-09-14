@@ -34,29 +34,36 @@ action code
 terminal String ENTERO;
 terminal String POR, MAS,MENOS,DIVISION;
 terminal String PARENTESIS_A, PARENTESIS_C, LLAVE_A, LLAVE_C,IGUAL;
-terminal String MOSTRAR, IF;
+terminal String MOSTRAR, IF,ELSE,FOR,WHILE;
 terminal String PUNTOYCOMA;
 terminal String IDENTI,INT,DOUBLE,CHAR,BOOL,STRING;
-terminal String DOUBLEN,LETRA,TRUE,FALSE,CADENA;
+terminal String DOUBLEN,TRUE,FALSE,CADENA;
 terminal String COMENLI,COMENMULTILI;
-
+terminal String VOID, MAIN;
+terminal String MAYOR,MENOR,MAYORIGUAL,MENORIGUAL,IGUALIGUAL,CERO;
+terminal String AND, OR, NOT,DO;
+terminal String SWITCH,CASE,BREAK,DOSPUNTOS,DEFAULT;
 
 //------> Declaración de no terminales
 non terminal inicio;
 non terminal LinkedList lista_instr;
 non terminal instruccion;
-non terminal expresion;
-non terminal instr_mostrar, if,declara,declaraig,comentarios,comentariosl;
+non terminal expresion, expresionf;
+non terminal instr_mostrar, if,else,for,while,declara,declaraig,comentarios,comentariosl;
 non terminal declaradou ,declaraigdou;
 non terminal declaracha ,declaraigcha;
 non terminal declarabol ,declaraigbol;
-non terminal declaracade ,declaraigcade;
+non terminal declaracade ,declaraigcade,declararfas;
+non terminal maind,do;
 
 // ------> Precedencia
 precedence left MAS;
 precedence left POR;
 precedence left MENOS;
 precedence left DIVISION;
+precedence left MAYOR, MENOR, MAYORIGUAL, MENORIGUAL, IGUALIGUAL;
+precedence left AND, OR;
+precedence right NOT;
 
 //------> Definir Simbolo Inicial
 start with inicio; 
@@ -99,7 +106,28 @@ instruccion ::= instr_mostrar:val {: RESULT = val; :}
     | declaraigcade:val  {: RESULT = val; :}
     | comentarios:val  {: RESULT = val; :}
     | comentariosl:val  {: RESULT = val; :}
-    
+    | maind:val  {: RESULT = val; :}
+    | else:val    {: RESULT = val; :}
+    | while:val    {: RESULT = val; :}
+    | for:val    {: RESULT = val; :}
+    | declararfas:val  {: RESULT = val; :}
+    | do:val  {: RESULT = val; :}
+;
+
+maind ::= VOID MAIN PARENTESIS_A PARENTESIS_C LLAVE_A lista_instr:inst LLAVE_C 
+    {:
+        LinkedList<String> lista = new LinkedList<>();
+        lista.add("def main():\n");
+
+        func.Funcion.contador++;
+        lista.addAll(func.Funcion.tabulaciones(inst));
+        func.Funcion.contador--;
+
+        lista.add("if__name__ = \"__main__\":\n");
+        lista.add("\tmain()\n");
+
+        RESULT = lista;
+    :}
 ;
 
 comentarios ::= COMENMULTILI:val  
@@ -118,10 +146,57 @@ comentariosl ::= COMENLI:val
 ;
 
 
+
 if ::= IF PARENTESIS_A expresion:exp PARENTESIS_C LLAVE_A lista_instr:inst LLAVE_C 
     {:
         LinkedList<String> lista = new LinkedList<>();
-        lista.add("if "+ exp + ":");
+        lista.add("if "+ exp + ":\n");
+
+        func.Funcion.contador++;
+        lista.addAll(func.Funcion.tabulaciones(inst));
+        func.Funcion.contador--;
+
+        RESULT = lista;
+    :}
+;
+
+while ::= WHILE PARENTESIS_A expresion:exp PARENTESIS_C LLAVE_A lista_instr:inst LLAVE_C 
+    {:
+        LinkedList<String> lista = new LinkedList<>();
+        lista.add("while "+ exp + ":\n");
+
+        func.Funcion.contador++;
+        lista.addAll(func.Funcion.tabulaciones(inst));
+        func.Funcion.contador--;
+
+        RESULT = lista;
+    :}
+;
+
+do ::= INT expresion:val IGUAL expresion:ent PUNTOYCOMA DO LLAVE_A lista_instr:inst LLAVE_C WHILE PARENTESIS_A expresion:exp PARENTESIS_C PUNTOYCOMA 
+    {:
+        LinkedList<String> lista = new LinkedList<>();
+        lista.add(val+" = "+ ent + "\n");
+        lista.add("while True:\n");
+
+        LinkedList<String> listas = new LinkedList<>();
+        listas.add(val+" = "+val+"+1\n");
+        listas.add("if ("+exp+"):\n");
+        listas.add("\tbreak\n");
+
+        func.Funcion.contador++;
+        lista.addAll(func.Funcion.tabulaciones(inst));
+        lista.addAll(func.Funcion.tabulaciones(listas));
+        func.Funcion.contador--;
+
+        RESULT = lista;
+    :}
+;
+
+else ::= ELSE IF PARENTESIS_A expresion:exp PARENTESIS_C LLAVE_A lista_instr:inst LLAVE_C 
+    {:
+        LinkedList<String> lista = new LinkedList<>();
+        lista.add("elif "+ exp + ":\n");
 
         func.Funcion.contador++;
         lista.addAll(func.Funcion.tabulaciones(inst));
@@ -134,7 +209,7 @@ if ::= IF PARENTESIS_A expresion:exp PARENTESIS_C LLAVE_A lista_instr:inst LLAVE
 instr_mostrar ::= MOSTRAR PARENTESIS_A expresion:val PARENTESIS_C PUNTOYCOMA   
             {: 
                 LinkedList<String> lista = new LinkedList<>();
-                lista.add("print("+val+")"); 
+                lista.add("print("+val+")\n"); 
                 RESULT = lista;
             :}
 ;
@@ -142,6 +217,13 @@ declara ::= INT expresion:val PUNTOYCOMA
             {: 
                 LinkedList<String> lista = new LinkedList<>();
                 lista.add("var "+val+"\n"); 
+                RESULT = lista;
+            :}
+;
+declararfas ::= expresion:exp IGUAL expresion:val PUNTOYCOMA   
+            {: 
+                LinkedList<String> lista = new LinkedList<>();
+                lista.add(exp+"="+val+"\n"); 
                 RESULT = lista;
             :}
 ;
@@ -209,14 +291,50 @@ declaraigcade ::= STRING expresion:exp IGUAL expresion:val PUNTOYCOMA
             :}
 ;
 
-expresion ::= expresion:a POR expresion:b  {: RESULT = a.toString()+"*"+b.toString() ; :}
-    | expresion:a MAS expresion:b          {: RESULT = a.toString()+"+"+b.toString() ; :}
-    | expresion:a MENOS expresion:b        {: RESULT = a.toString()+"-"+b.toString() ; :}
-    | expresion:a DIVISION expresion:b     {: RESULT = a.toString()+"/"+b.toString() ; :}
+expresion ::= expresion:a POR expresion:b  {: RESULT = a.toString()+" * "+b.toString() ; :}
+    | expresion:a MAS expresion:b          {: RESULT = a.toString()+" + "+b.toString() ; :}
+    | expresion:a MENOS expresion:b        {: RESULT = a.toString()+" - "+b.toString() ; :}
+    | expresion:a DIVISION expresion:b     {: RESULT = a.toString()+" / "+b.toString() ; :}
+    | expresion:a MAYOR expresion:b        {: RESULT = a.toString()+" > "+b.toString() ; :}
+    | expresion:a MENOR expresion:b        {: RESULT = a.toString()+" < "+b.toString() ; :}
+    | expresion:a MAYORIGUAL expresion:b   {: RESULT = a.toString()+" >= "+b.toString() ; :}
+    | expresion:a MENORIGUAL expresion:b   {: RESULT = a.toString()+" <= "+b.toString() ; :}
+    | expresion:a IGUALIGUAL expresion:b   {: RESULT = a.toString()+" == "+b.toString() ; :}
+    | expresion:a NOT IGUAL expresion:b    {: RESULT = a.toString()+" != "+b.toString() ; :}
+    | expresion:a AND expresion:b          {: RESULT = a.toString()+" and "+b.toString() ; :}
+    | expresion:a OR expresion:b           {: RESULT = a.toString()+" or "+b.toString() ; :}
+    | expresion:a NOT expresion:b          {: RESULT = a.toString()+" not "+b.toString() ; :}
+    | CADENA:a MAS expresion:b             {: RESULT = a.toString()+","+b.toString() ; :}
     | ENTERO:val                           {: RESULT = val; :}
     | IDENTI:val                           {: RESULT = val; :}
     | DOUBLEN:val                          {: RESULT = val; :}
-    | TRUE:val                          {: RESULT = val; :}
-    | FALSE:val                          {: RESULT = val; :}
-    | CADENA:val                          {: RESULT = val; :}
+    | TRUE:val                             {: RESULT = val; :}
+    | FALSE:val                            {: RESULT = val; :}
+    | CADENA:val                           {: RESULT = val; :}
 ;
+
+
+for ::= FOR PARENTESIS_A INT expresionf:exz expresionf:exp PUNTOYCOMA expresion MAS MAS PARENTESIS_C LLAVE_A lista_instr:inst LLAVE_C 
+    {:
+        LinkedList<String> lista = new LinkedList<>();
+        lista.add("for "+exz+" in range("+ exp +"):\n");
+
+        func.Funcion.contador++;
+        lista.addAll(func.Funcion.tabulaciones(inst));
+        func.Funcion.contador--;
+
+        RESULT = lista;
+    :}
+;
+
+expresionf ::= IGUAL CERO:a PUNTOYCOMA expresionf:b       {: RESULT = 1+","+b.toString() ; :}
+    | IGUAL expresionf:a PUNTOYCOMA expresionf:b          {: RESULT = a.toString()+","+b.toString() ; :}
+    | INT expresionf:exp IGUAL expresionf:val             {: RESULT = val; :}
+    | ENTERO:val                                          {: RESULT = val; :}
+    | IDENTI:val                                          {: RESULT = val; :}
+    | expresionf:a MENOR expresionf:b                     {: RESULT =b.toString(); :}
+    | expresionf:a MENORIGUAL expresionf:b                {: RESULT =b.toString(); :}
+
+;
+
+

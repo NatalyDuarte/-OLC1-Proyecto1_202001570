@@ -8,34 +8,53 @@ package Analis;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int MENOS = 5;
-  public static final int PUNTOYCOMA = 14;
-  public static final int CADENA = 25;
-  public static final int IGUAL = 11;
-  public static final int INT = 16;
-  public static final int LETRA = 22;
-  public static final int CHAR = 18;
-  public static final int IDENTI = 15;
-  public static final int DIVISION = 6;
-  public static final int DOUBLEN = 21;
-  public static final int TRUE = 23;
-  public static final int IF = 13;
+  public static final int DOSPUNTOS = 45;
   public static final int POR = 3;
-  public static final int STRING = 20;
-  public static final int EOF = 0;
-  public static final int MOSTRAR = 12;
-  public static final int COMENMULTILI = 27;
-  public static final int FALSE = 24;
-  public static final int PARENTESIS_C = 8;
-  public static final int error = 1;
-  public static final int PARENTESIS_A = 7;
-  public static final int LLAVE_C = 10;
-  public static final int BOOL = 19;
-  public static final int LLAVE_A = 9;
+  public static final int CHAR = 21;
+  public static final int PUNTOYCOMA = 17;
   public static final int ENTERO = 2;
+  public static final int MOSTRAR = 12;
+  public static final int CASE = 43;
+  public static final int DOUBLE = 20;
+  public static final int IDENTI = 18;
+  public static final int INT = 19;
+  public static final int LLAVE_C = 10;
+  public static final int FOR = 15;
+  public static final int LLAVE_A = 9;
+  public static final int NOT = 40;
+  public static final int AND = 38;
+  public static final int MENORIGUAL = 35;
+  public static final int IGUAL = 11;
+  public static final int OR = 39;
+  public static final int BOOL = 22;
+  public static final int MAIN = 31;
+  public static final int IF = 13;
+  public static final int MAYORIGUAL = 34;
+  public static final int EOF = 0;
+  public static final int TRUE = 25;
+  public static final int error = 1;
+  public static final int CADENA = 27;
+  public static final int MENOS = 5;
+  public static final int COMENLI = 28;
+  public static final int MENOR = 33;
+  public static final int BREAK = 44;
+  public static final int VOID = 30;
+  public static final int DOUBLEN = 24;
+  public static final int SWITCH = 42;
+  public static final int MAYOR = 32;
+  public static final int ELSE = 14;
+  public static final int IGUALIGUAL = 36;
+  public static final int PARENTESIS_C = 8;
+  public static final int WHILE = 16;
+  public static final int PARENTESIS_A = 7;
+  public static final int DEFAULT = 46;
+  public static final int COMENMULTILI = 29;
+  public static final int STRING = 23;
+  public static final int FALSE = 26;
+  public static final int CERO = 37;
+  public static final int DIVISION = 6;
+  public static final int DO = 41;
   public static final int MAS = 4;
-  public static final int COMENLI = 26;
-  public static final int DOUBLE = 17;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -51,6 +70,9 @@ public class sym {
   "IGUAL",
   "MOSTRAR",
   "IF",
+  "ELSE",
+  "FOR",
+  "WHILE",
   "PUNTOYCOMA",
   "IDENTI",
   "INT",
@@ -59,12 +81,28 @@ public class sym {
   "BOOL",
   "STRING",
   "DOUBLEN",
-  "LETRA",
   "TRUE",
   "FALSE",
   "CADENA",
   "COMENLI",
-  "COMENMULTILI"
+  "COMENMULTILI",
+  "VOID",
+  "MAIN",
+  "MAYOR",
+  "MENOR",
+  "MAYORIGUAL",
+  "MENORIGUAL",
+  "IGUALIGUAL",
+  "CERO",
+  "AND",
+  "OR",
+  "NOT",
+  "DO",
+  "SWITCH",
+  "CASE",
+  "BREAK",
+  "DOSPUNTOS",
+  "DEFAULT"
   };
 }
 

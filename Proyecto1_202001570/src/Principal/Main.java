@@ -11,6 +11,7 @@ public class Main {
      */
     public static void main(String[] args) {
         //analizadores("src/Analis/", "Lexer.jflex", "Parser.cup");
+        //analizadores("src/AnalisJson/", "Lexer.jflex", "Parser.cup");
         Principal m = new Principal();
         m.setVisible(true);
     }
