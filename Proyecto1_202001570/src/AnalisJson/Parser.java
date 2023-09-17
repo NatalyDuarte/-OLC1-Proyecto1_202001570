@@ -7,6 +7,8 @@ package AnalisJson;
 
 import java_cup.runtime.*;
 import java.util.LinkedList;
+import java.util.HashMap;
+import Principal.*;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -112,17 +114,19 @@ public class Parser extends java_cup.runtime.lr_parser {
 
 
     public static String resultado = ""; 
-
+    public static HashMap<String, String> listaVariables = new HashMap<>();
     public void syntax_error(Symbol s)
     {
         System.err.println("Error Sintactico: "+ s.value + " - Fila: " + s.right + " - Columna: " + s.left + ". Recuperado" );
-        data.Info.listaErrores.add(new data.Error("Error Sintactico", "No reconocido " + s.value , s.right , s.left ));
+        TError nuevoError = new TError("Error Sintactico", s.value.toString(),s.right,s.left);
+        Principal.Lista_Errores.add(nuevoError);
     }
 
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception
     {
         System.err.println("Error Sintactico: "+ s.value + " - Fila: " + s.right + " - Columna: " + s.left + ". Sin recuperacion." );
-        data.Info.listaErrores.add(new data.Error("Error Sintactico", "No reconocido " + s.value , s.right , s.left ));
+        TError nuevoError = new TError("Error Sintactico", s.value.toString(),s.right,s.left);
+        Principal.Lista_Errores.add(nuevoError);
     }
 
 
@@ -249,7 +253,7 @@ class CUP$Parser$actions {
 		int varleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int varright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		Object var = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 data.Info.listaVariables.put(nombre.toString(), var.toString()); 
+		listaVariables.put(nombre.toString(), var.toString()); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("asignacion",1, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -285,7 +289,7 @@ class CUP$Parser$actions {
 		int valleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int valright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String val = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = data.Info.listaVariables.get(val); 
+		 RESULT = val; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expresion",4, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;

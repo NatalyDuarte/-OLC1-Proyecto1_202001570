@@ -3,6 +3,7 @@ package Analis;
 
 import java_cup.runtime.*;
 import java.util.LinkedList;
+import Principal.*;
 
 
 //------> Codigo para el parser
@@ -14,12 +15,16 @@ parser code
 
     public void syntax_error(Symbol s)
     {
-            System.err.println("Error Sintactico: "+ s.value + " - Fila: " + s.right + " - Columna: " + s.left + ". Recuperado" );
+        System.err.println("Error Sintactico: "+ s.value + " - Fila: " + s.right + " - Columna: " + s.left + ". Recuperado" );
+        TError nuevoError = new TError("Error Sintactico", s.value.toString(),s.right,s.left);
+        Principal.Lista_Errores.add(nuevoError);
     }
 
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception
     {
-            System.err.println("Error Sintactico: "+ s.value + " - Fila: " + s.right + " - Columna: " + s.left + ". Sin recuperacion." );
+        System.err.println("Error Sintactico: "+ s.value + " - Fila: " + s.right + " - Columna: " + s.left + ". Sin recuperacion." );
+        TError nuevoError = new TError("Error Sintactico", s.value.toString(),s.right,s.left);
+        Principal.Lista_Errores.add(nuevoError);
     }
 
 :}
@@ -35,7 +40,7 @@ terminal String ENTERO;
 terminal String POR, MAS,MENOS,DIVISION;
 terminal String PARENTESIS_A, PARENTESIS_C, LLAVE_A, LLAVE_C,IGUAL;
 terminal String MOSTRAR, IF,ELSE,FOR,WHILE;
-terminal String PUNTOYCOMA;
+terminal String PUNTOYCOMA,COMA;
 terminal String IDENTI,INT,DOUBLE,CHAR,BOOL,STRING;
 terminal String DOUBLEN,TRUE,FALSE,CADENA;
 terminal String COMENLI,COMENMULTILI;
@@ -43,6 +48,8 @@ terminal String VOID, MAIN;
 terminal String MAYOR,MENOR,MAYORIGUAL,MENORIGUAL,IGUALIGUAL,CERO;
 terminal String AND, OR, NOT,DO;
 terminal String SWITCH,CASE,BREAK,DOSPUNTOS,DEFAULT;
+terminal String DEFIGLO,DOLAR,NEWVALOR,GRAFIB;
+terminal String TITULO,TITULOX,TITULOY,EJEX,EJEY,VALORES; 
 
 //------> Declaración de no terminales
 non terminal inicio;
@@ -54,7 +61,9 @@ non terminal declaradou ,declaraigdou;
 non terminal declaracha ,declaraigcha;
 non terminal declarabol ,declaraigbol;
 non terminal declaracade ,declaraigcade,declararfas;
-non terminal maind,do;
+non terminal grafibarras, stringb,maind,do,funcion,declaraigdounew;
+non terminal ejex,proba;
+
 
 // ------> Precedencia
 precedence left MAS;
@@ -112,7 +121,56 @@ instruccion ::= instr_mostrar:val {: RESULT = val; :}
     | for:val    {: RESULT = val; :}
     | declararfas:val  {: RESULT = val; :}
     | do:val  {: RESULT = val; :}
+    | funcion:val {: RESULT = val; :}
+    | declaraigdounew:val {: RESULT = val; :}
+    | grafibarras:val {: RESULT = val; :}
+    | stringb:val {: RESULT = val; :}
+    | ejex:val {: RESULT = val; :}
+
 ;
+
+grafibarras ::= VOID GRAFIB PARENTESIS_A PARENTESIS_C LLAVE_A lista_instr:inst LLAVE_C 
+    {: 
+    LinkedList<String> lista = new LinkedList<>();
+    lista.add("void GraficaBarras(){\n");
+    lista.addAll(inst);
+    lista.add("\n");
+    lista.add("}\n");
+    func.Funcion.funciones.addAll(inst);
+    RESULT = lista;
+    :}
+;
+
+stringb ::= STRING TITULO IGUAL expresion:cades PUNTOYCOMA 
+            {: 
+                LinkedList<String> lista = new LinkedList<>();
+                lista.add("string titulo = "+cades.toString()+";\n"); 
+                RESULT = lista;
+            :}
+;
+
+
+
+funcion ::= VOID DEFIGLO PARENTESIS_A PARENTESIS_C LLAVE_A lista_instr:inst LLAVE_C 
+    {: 
+    LinkedList<String> lista = new LinkedList<>();
+    lista.add("void DefinirGlobales(){\n");
+    lista.addAll(inst);
+    lista.add("\n");
+    lista.add("}\n");
+    func.Funcion.funciones.addAll(inst);
+    RESULT = lista;
+    :}
+;
+
+declaraigdounew ::= DOUBLE expresion:val IGUAL DOLAR LLAVE_A NEWVALOR COMA expresion:cade COMA expresion:cades LLAVE_C PUNTOYCOMA 
+            {: 
+                LinkedList<String> lista = new LinkedList<>();
+                lista.add("double "+val.toString()+" = ${ NewValor, "+cade.toString()+","+cades.toString()+" };\n"); 
+                RESULT = lista;
+            :}
+;
+
 
 maind ::= VOID MAIN PARENTESIS_A PARENTESIS_C LLAVE_A lista_instr:inst LLAVE_C 
     {:
@@ -248,6 +306,7 @@ declaraigdou ::= DOUBLE expresion:exp IGUAL expresion:val PUNTOYCOMA
                 RESULT = lista;
             :}
 ;
+
 declaracha ::= CHAR expresion:val PUNTOYCOMA     
             {: 
                 LinkedList<String> lista = new LinkedList<>();

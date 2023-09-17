@@ -11,6 +11,7 @@ public class sym {
   public static final int CADENA = 2;
   public static final int COMA = 4;
   public static final int COMENLI = 9;
+  public static final int NOMBREAR = 11;
   public static final int DOSPUNTOS = 8;
   public static final int EOF = 0;
   public static final int LLAVE_C = 7;
@@ -30,7 +31,8 @@ public class sym {
   "LLAVE_C",
   "DOSPUNTOS",
   "COMENLI",
-  "COMENMULTILI"
+  "COMENMULTILI",
+  "NOMBREAR"
   };
 }
 

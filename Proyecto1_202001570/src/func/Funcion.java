@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
  * @author Natal
  */
 public class Funcion {
-    public static HashMap variables = new HashMap();//Tabla de Simbolos para variables
+    public static LinkedList<String> funciones = new LinkedList<>();//Lista de funciones estadisticas
     public static int contador = 0; //Contador de tabulaciones
     public static LinkedList<String> traduccion = new LinkedList<>();//Lista de traduccion 
     

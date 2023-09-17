@@ -10,6 +10,17 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.util.Scanner;
 import java.util.regex.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 
 /**
  *
@@ -21,6 +32,13 @@ public class Principal extends javax.swing.JFrame {
      * Creates new form Principal
      */
     public String contenido = "";
+    public String nombrearchi = "";
+    public int contador = 0;
+    public String ruta = "";
+    public String ruta1 = "";
+    public static ArrayList<TError> Lista_Errores = new ArrayList<>();
+    public static ArrayList<Tokens> Lista_Tokens = new ArrayList<>();
+    public static ArrayList<String> Des_Error = new ArrayList<>();
     public Principal() {
         initComponents();
     }
@@ -42,6 +60,9 @@ public class Principal extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        jButton9 = new javax.swing.JButton();
+        jButton10 = new javax.swing.JButton();
+        jTextField2 = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -53,7 +74,12 @@ public class Principal extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -98,6 +124,29 @@ public class Principal extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Franklin Gothic Demi", 0, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
 
+        jButton9.setBackground(new java.awt.Color(102, 102, 102));
+        jButton9.setFont(new java.awt.Font("Bodoni MT Black", 3, 18)); // NOI18N
+        jButton9.setForeground(new java.awt.Color(51, 255, 255));
+        jButton9.setText("Guardar");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+
+        jButton10.setBackground(new java.awt.Color(102, 102, 102));
+        jButton10.setFont(new java.awt.Font("Bodoni MT Black", 3, 18)); // NOI18N
+        jButton10.setForeground(new java.awt.Color(51, 255, 255));
+        jButton10.setText("Guardar como");
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+
+        jTextField2.setBackground(new java.awt.Color(0, 0, 0));
+        jTextField2.setForeground(new java.awt.Color(102, 255, 255));
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -110,13 +159,17 @@ public class Principal extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(50, 50, 50)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addGap(42, 42, 42)
                                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel1)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGap(50, 50, 50)
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 94, Short.MAX_VALUE)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(114, 114, 114))
@@ -126,18 +179,24 @@ public class Principal extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(jButton2))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(24, 24, 24)
                         .addComponent(jLabel1)
                         .addGap(52, 52, 52)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton1))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(43, 43, 43)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(30, 30, 30)
-                .addComponent(jButton2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jButton1)
+                        .addGap(32, 32, 32)
+                        .addComponent(jButton9)
+                        .addGap(36, 36, 36)
+                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton10)))
+                .addContainerGap(119, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Json", jPanel4);
@@ -200,6 +259,29 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
+        jButton7.setBackground(new java.awt.Color(102, 102, 102));
+        jButton7.setFont(new java.awt.Font("Bodoni MT Black", 3, 18)); // NOI18N
+        jButton7.setForeground(new java.awt.Color(51, 255, 255));
+        jButton7.setText("Guardar como");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
+        jButton8.setBackground(new java.awt.Color(102, 102, 102));
+        jButton8.setFont(new java.awt.Font("Bodoni MT Black", 3, 18)); // NOI18N
+        jButton8.setForeground(new java.awt.Color(51, 255, 255));
+        jButton8.setText("Guardar");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+
+        jTextField1.setBackground(new java.awt.Color(0, 0, 0));
+        jTextField1.setForeground(new java.awt.Color(102, 255, 255));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -209,25 +291,34 @@ public class Principal extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(28, 28, 28))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
-                        .addComponent(jButton3)
-                        .addGap(293, 293, 293))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
+                                .addComponent(jButton3)
+                                .addGap(255, 255, 255))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addGap(178, 178, 178)
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel5))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(38, 38, 38))))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                    .addContainerGap(530, Short.MAX_VALUE)
+                    .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(28, 28, 28)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -251,23 +342,64 @@ public class Principal extends javax.swing.JFrame {
                     .addComponent(jButton3)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton4)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton7)
+                        .addComponent(jButton4))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(3, 3, 3)))
+                .addContainerGap(46, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                    .addContainerGap(439, Short.MAX_VALUE)
+                    .addComponent(jButton8)
+                    .addGap(88, 88, 88)))
         );
 
         jTabbedPane1.addTab("Statpy", jPanel1);
 
         jPanel2.setBackground(new java.awt.Color(0, 0, 0));
 
+        jButton5.setBackground(new java.awt.Color(102, 102, 102));
+        jButton5.setFont(new java.awt.Font("Bodoni MT Black", 0, 24)); // NOI18N
+        jButton5.setForeground(new java.awt.Color(0, 255, 255));
+        jButton5.setText("Reporte tokens");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jButton6.setBackground(new java.awt.Color(102, 102, 102));
+        jButton6.setFont(new java.awt.Font("Bodoni MT Black", 0, 24)); // NOI18N
+        jButton6.setForeground(new java.awt.Color(0, 255, 255));
+        jButton6.setText("Reporte Errores");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 751, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(255, 255, 255)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton6)
+                    .addComponent(jButton5))
+                .addContainerGap(262, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 523, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(115, 115, 115)
+                .addComponent(jButton5)
+                .addGap(94, 94, 94)
+                .addComponent(jButton6)
+                .addContainerGap(277, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Reporte", jPanel2);
@@ -292,10 +424,10 @@ public class Principal extends javax.swing.JFrame {
         abrir.setFileFilter(filtrado);
         abrir.showOpenDialog(this);
         File archi=abrir.getSelectedFile();
-        String ruta=archi.getAbsolutePath();
-        String nombrearchi = archi.getName();
+        ruta1=archi.getAbsolutePath();
+        nombrearchi = archi.getName();
         System.out.println(nombrearchi);
-        contenido=obtencion(ruta);
+        contenido=obtencion(ruta1);
         String patron = "(?<=:\\s*\")[^\"]+";
         String patron2 = "\\d+\\.\\d+";
         Pattern pattern = Pattern.compile(patron);
@@ -312,12 +444,100 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        //data.Info.listaVariables.clear();
         String conte = jTextArea1.getText();
         System.out.println(conte);
         analizarJson(conte);
+        /*if (contador== 1){
+            HashMap<String, String> listaVariables1 = AnalisJson.Parser.listaVariables;
+            data.Info.hashMapPrincipal.put(nombrearchi,listaVariables1);
+            contador++;
+            AnalisJson.Parser.listaVariables.clear();
+            System.out.println(contador);
+        }else if (contador== 2){
+            HashMap<String, String> listaVariables2 = AnalisJson.Parser.listaVariables;
+            data.Info.hashMapPrincipal.put(nombrearchi,listaVariables2);
+            contador++;
+            AnalisJson.Parser.listaVariables.clear();
+            System.out.println(contador);
+        }else if (contador== 3){
+            HashMap<String, String> listaVariables3 = AnalisJson.Parser.listaVariables;
+            data.Info.hashMapPrincipal.put(nombrearchi,listaVariables3);
+            contador++;
+            AnalisJson.Parser.listaVariables.clear();
+            System.out.println(contador);
+        }else if (contador== 4){
+            HashMap<String, String> listaVariables4 = AnalisJson.Parser.listaVariables;
+            data.Info.hashMapPrincipal.put(nombrearchi,listaVariables4);
+            contador++;
+            AnalisJson.Parser.listaVariables.clear();
+            System.out.println(contador);
+        }else if (contador== 5){
+            HashMap<String, String> listaVariables5 = AnalisJson.Parser.listaVariables;
+            data.Info.hashMapPrincipal.put(nombrearchi,listaVariables5);
+            contador++;
+            AnalisJson.Parser.listaVariables.clear();
+            System.out.println(contador);
+        }else if (contador== 6){
+            HashMap<String, String> listaVariables6 = AnalisJson.Parser.listaVariables;
+            data.Info.hashMapPrincipal.put(nombrearchi,listaVariables6);
+            contador++;
+            AnalisJson.Parser.listaVariables.clear();
+            System.out.println(contador);
+        }else if (contador== 7){
+            HashMap<String, String> listaVariables7 = AnalisJson.Parser.listaVariables;
+            data.Info.hashMapPrincipal.put(nombrearchi,listaVariables7);
+            contador++;
+            AnalisJson.Parser.listaVariables.clear();
+            System.out.println(contador);
+        }else if (contador== 8){
+            HashMap<String, String> listaVariables8 = AnalisJson.Parser.listaVariables;
+            data.Info.hashMapPrincipal.put(nombrearchi,listaVariables8);
+            contador++;
+            AnalisJson.Parser.listaVariables.clear();
+            System.out.println(contador);
+        }else if (contador== 9){
+            HashMap<String, String> listaVariables9 = AnalisJson.Parser.listaVariables;
+            data.Info.hashMapPrincipal.put(nombrearchi,listaVariables9);
+            contador++;
+            AnalisJson.Parser.listaVariables.clear();
+            System.out.println(contador);
+        }else if (contador== 10){
+            HashMap<String, String> listaVariables10 = AnalisJson.Parser.listaVariables;
+            data.Info.hashMapPrincipal.put(nombrearchi,listaVariables10);
+            contador++;
+            AnalisJson.Parser.listaVariables.clear();
+            System.out.println(contador);
+        }else{
+            HashMap<String, String> listaVariables = AnalisJson.Parser.listaVariables;
+            data.Info.hashMapPrincipal.put(nombrearchi,listaVariables);
+            contador++;
+            AnalisJson.Parser.listaVariables.clear();
+            System.out.println(contador);
+        }*/
+        HashMap<String, String> listaVariables = AnalisJson.Parser.listaVariables;
+        data.Info.hashMapPrincipal.put(nombrearchi,listaVariables);
+        jLabel2.setText("");
+        jTextArea1.setText("");
+        for (Map.Entry<String, HashMap<String, String>> entry : data.Info.hashMapPrincipal.entrySet()) {
+            String key = entry.getKey();
+            HashMap<String, String> innerMap = entry.getValue();
+
+            System.out.println("Clave del mapa principal: " + key);
+
+            // Recorrer y imprimir el contenido del mapa interno
+            for (Map.Entry<String, String> innerEntry : innerMap.entrySet()) {
+                String innerKey = innerEntry.getKey();
+                String innerValue = innerEntry.getValue();
+                System.out.println("   Clave interna: " + innerKey + ", Valor interno: " + innerValue);
+            }
+        }
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        func.Funcion.traduccion.clear();
+        jTextArea2.setText("");
         String conte = jTextArea3.getText();
         System.out.println(conte);
         analizar(conte);
@@ -333,8 +553,8 @@ public class Principal extends javax.swing.JFrame {
         abrir.setFileFilter(filtrado);
         abrir.showOpenDialog(this);
         File archi=abrir.getSelectedFile();
-        String ruta=archi.getAbsolutePath();
-        String nombrearchi = archi.getName();
+        ruta=archi.getAbsolutePath();
+        nombrearchi = archi.getName();
         System.out.println(nombrearchi);
         contenido=obtencion(ruta);
         String patron = "(?<=:\\s*\")[^\"]+";
@@ -351,6 +571,73 @@ public class Principal extends javax.swing.JFrame {
             jLabel6.setText("Error en lectura de archivo");
         }
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        reportetokens();
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        reporteerrores();
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        String rua = jTextField1.getText();
+        try {
+            FileOutputStream archivoSalidas = new FileOutputStream(rua);
+            String conte = jTextArea3.getText();
+            byte[] bytes = conte.getBytes();
+            archivoSalidas.write(bytes);
+            archivoSalidas.close();
+            System.out.println("Archivo guardado con éxito.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Error al guardar el archivo.");
+        }
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        try {
+            FileOutputStream archivoSalidas = new FileOutputStream(ruta);
+            String conte = jTextArea3.getText();
+            byte[] bytes = conte.getBytes();
+            archivoSalidas.write(bytes);
+            archivoSalidas.close();
+            System.out.println("Archivo guardado con éxito.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Error al guardar el archivo.");
+        }
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        try {
+            FileOutputStream archivoSalida = new FileOutputStream(ruta1);
+            String conte = jTextArea1.getText();
+            System.out.println(conte);
+            byte[] bytes = conte.getBytes();
+            archivoSalida.write(bytes);
+            archivoSalida.close();
+            System.out.println("Archivo guardado con éxito.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Error al guardar el archivo.");
+        }
+    }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        String rua = jTextField2.getText();
+        try {
+            FileOutputStream archivoSalidas = new FileOutputStream(rua);
+            String conte = jTextArea1.getText();
+            byte[] bytes = conte.getBytes();
+            archivoSalidas.write(bytes);
+            archivoSalidas.close();
+            System.out.println("Archivo guardado con éxito.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Error al guardar el archivo.");
+        }
+    }//GEN-LAST:event_jButton10ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -438,12 +725,251 @@ public class Principal extends javax.swing.JFrame {
             System.out.println(e);
         } 
     } 
+    public static void reporteerrores() {
+        File R_Errores;
+        FileWriter FW_Errores;
+        try {
+            R_Errores = new File("RepoErrores.html");
+            FW_Errores = new FileWriter(R_Errores, false);
+            
+            FW_Errores.write("<html> \n");
+            FW_Errores.write("<head> \n");
+            FW_Errores.write("<style>body {\n" +
+                            "	height: 100%;\n" +
+                            "}\n" +
+                            "\n" +
+                            "body {\n" +
+                            "	margin: 0;\n" +
+                            "	background: linear-gradient(45deg, #49a09d, #5f2c82);\n" +
+                            "	font-family: sans-serif;\n" +
+                            "	font-weight: 100;\n" +
+                            "}\n" +
+                            "\n" +
+                            ".container {\n" +
+                            "	position: absolute;\n" +
+                            "	top: 50%;\n" +
+                            "	left: 50%;\n" +
+                            "	transform: translate(-50%, -50%);\n" +
+                            "}\n" +
+                            "\n" +
+                            "table {\n" +
+                            "	width: 800px;\n" +
+                            "	border-collapse: collapse;\n" +
+                            "	overflow: hidden;\n" +
+                            "	box-shadow: 0 0 20px rgba(0,0,0,0.1);\n" +
+                            "}\n" +
+                            "\n" +
+                            "th,\n" +
+                            "td {\n" +
+                            "	padding: 15px;\n" +
+                            "	background-color: rgba(255,255,255,0.2);\n" +
+                            "	color: #fff;\n" +
+                            "}\n" +
+                            "\n" +
+                            "th {\n" +
+                            "	text-align: left;\n" +
+                            "}\n" +
+                            "\n" +
+                            "thead {\n" +
+                            "	th {\n" +
+                            "		background-color: #55608f;\n" +
+                            "	}\n" +
+                            "}\n" +
+                            "\n" +
+                            "tbody {\n" +
+                            "	tr {\n" +
+                            "		&:hover {\n" +
+                            "			background-color: rgba(255,255,255,0.3);\n" +
+                            "		}\n" +
+                            "	}\n" +
+                            "	td {\n" +
+                            "		position: relative;\n" +
+                            "		&:hover {\n" +
+                            "			&:before {\n" +
+                            "				content: \"\";\n" +
+                            "				position: absolute;\n" +
+                            "				left: 0;\n" +
+                            "				right: 0;\n" +
+                            "				top: -9999px;\n" +
+                            "				bottom: -9999px;\n" +
+                            "				background-color: rgba(255,255,255,0.2);\n" +
+                            "				z-index: -1;\n" +
+                            "			}\n" +
+                            "		}\n" +
+                            "	}\n" +
+                            "}</style>");
+            FW_Errores.write("<title>Reporte de Errores</title></head> \n");
+            FW_Errores.write("<body> \n");
+            
+            FW_Errores.write("<br><br><br><h1><center>Reporte de Errores</center></h1> \n");
+            FW_Errores.write("<div class=\"container\">\n" +
+                            "	<table>\n" +
+                            "		<thead>\n" +
+                            "			<tr>\n" +
+                            "				<th>Tipo de Error</th>\n" +
+                            "				<th>Lexema</th>\n" +
+                            "				<th>Fila</th>\n" +
+                            "				<th>Columna</th>\n" +
+                            "			</tr>\n" +
+                            "		</thead>\n" +
+                            "		<tbody>");
+            for(int i=0; i<Lista_Errores.size(); i++) {
+                FW_Errores.write("<tr> \n");
+                FW_Errores.write("<td><strong>"+Lista_Errores.get(i).descripcion+"</strong></td> \n");
+                FW_Errores.write("<td><strong>"+Lista_Errores.get(i).lexema+"</strong></td> \n");
+                FW_Errores.write("<td><strong>"+Lista_Errores.get(i).linea+"</strong></td> \n");
+                FW_Errores.write("<td><strong>"+Lista_Errores.get(i).columna+"</strong></td> \n");
+                FW_Errores.write("</tr> \n");
+            }
+            
+            FW_Errores.write("		</tbody>\n" +
+                            "	</table>\n" +
+                            "</div>\n");
+            FW_Errores.write("</body> \n");
+            FW_Errores.write("</html> \n");
+            
+            FW_Errores.close();
+            
+            try {
+                String url ="RepoErrores.html";
+                Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler "+url);
+            } catch(Exception e) {
+                System.out.println(e);
+            }
+            
+        } catch(Exception e) {
+            System.out.println("Error al escribir archivo de errores");
+        }  			
+    }
+    
+    public static void reportetokens() {
+        File R_Errores;
+        FileWriter FW_Errores;
+        try {
+            R_Errores = new File("RepoTokens.html");
+            FW_Errores = new FileWriter(R_Errores, false);
+            
+            FW_Errores.write("<html> \n");
+            FW_Errores.write("<head> \n");
+            FW_Errores.write("<style>body {\n" +
+                            "	height: 100%;\n" +
+                            "}\n" +
+                            "\n" +
+                            "body {\n" +
+                            "	margin: 0;\n" +
+                            "	background: linear-gradient(45deg, #49a09d, #5f2c82);\n" +
+                            "	font-family: sans-serif;\n" +
+                            "	font-weight: 100;\n" +
+                            "}\n" +
+                            "\n" +
+                            ".container {\n" +
+                            "	position: absolute;\n" +
+                            "	top: 50%;\n" +
+                            "	left: 50%;\n" +
+                            "	transform: translate(-50%, -50%);\n" +
+                            "}\n" +
+                            "\n" +
+                            "table {\n" +
+                            "	width: 800px;\n" +
+                            "	border-collapse: collapse;\n" +
+                            "	overflow: hidden;\n" +
+                            "	box-shadow: 0 0 20px rgba(0,0,0,0.1);\n" +
+                            "}\n" +
+                            "\n" +
+                            "th,\n" +
+                            "td {\n" +
+                            "	padding: 15px;\n" +
+                            "	background-color: rgba(255,255,255,0.2);\n" +
+                            "	color: #fff;\n" +
+                            "}\n" +
+                            "\n" +
+                            "th {\n" +
+                            "	text-align: left;\n" +
+                            "}\n" +
+                            "\n" +
+                            "thead {\n" +
+                            "	th {\n" +
+                            "		background-color: #55608f;\n" +
+                            "	}\n" +
+                            "}\n" +
+                            "\n" +
+                            "tbody {\n" +
+                            "	tr {\n" +
+                            "		&:hover {\n" +
+                            "			background-color: rgba(255,255,255,0.3);\n" +
+                            "		}\n" +
+                            "	}\n" +
+                            "	td {\n" +
+                            "		position: relative;\n" +
+                            "		&:hover {\n" +
+                            "			&:before {\n" +
+                            "				content: \"\";\n" +
+                            "				position: absolute;\n" +
+                            "				left: 0;\n" +
+                            "				right: 0;\n" +
+                            "				top: -9999px;\n" +
+                            "				bottom: -9999px;\n" +
+                            "				background-color: rgba(255,255,255,0.2);\n" +
+                            "				z-index: -1;\n" +
+                            "			}\n" +
+                            "		}\n" +
+                            "	}\n" +
+                            "}</style>");
+            FW_Errores.write("<title>Reporte Tokens</title></head> \n");
+            FW_Errores.write("<body> \n");
+            
+            FW_Errores.write("<br><br><br><h1><center>Reporte Tokens</center></h1> \n");
+            FW_Errores.write("<div class=\"container\">\n" +
+                            "	<table>\n" +
+                            "		<thead>\n" +
+                            "			<tr>\n" +
+                            "				<th>Lexema</th>\n" +
+                            "				<th>Token</th>\n" +
+                            "				<th>Fila</th>\n" +
+                            "				<th>Columna</th>\n" +
+                            "			</tr>\n" +
+                            "		</thead>\n" +
+                            "		<tbody>");
+            for(int i=0; i<Lista_Tokens.size(); i++) {
+                FW_Errores.write("<tr> \n");
+                FW_Errores.write("<td><strong>"+Lista_Tokens.get(i).lexema +"</strong></td> \n");
+                FW_Errores.write("<td><strong>"+Lista_Tokens.get(i).token+"</strong></td> \n");
+                FW_Errores.write("<td><strong>"+Lista_Tokens.get(i).linea+"</strong></td> \n");
+                FW_Errores.write("<td><strong>"+Lista_Tokens.get(i).columna+"</strong></td> \n");
+                FW_Errores.write("</tr> \n");
+            }
+            
+            FW_Errores.write("		</tbody>\n" +
+                            "	</table>\n" +
+                            "</div>\n");
+            FW_Errores.write("</body> \n");
+            FW_Errores.write("</html> \n");
+            
+            FW_Errores.close();
+            
+            try {
+                String url ="RepoTokens.html";
+                Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler "+url);
+            } catch(Exception e) {
+                System.out.println(e);
+            }
+            
+        } catch(Exception e) {
+            System.out.println("Error al escribir archivo de tokens");
+        }  			
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -460,5 +986,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextArea jTextArea3;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }

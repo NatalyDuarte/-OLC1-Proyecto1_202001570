@@ -5,9 +5,7 @@
         <group>
             <file>file:/C:/Users/Natal/OneDrive/Documentos/NetBeansProjects/Proyecto1_202001570/src/Principal/Principal.java</file>
             <file>file:/C:/Users/Natal/OneDrive/Documentos/NetBeansProjects/Proyecto1_202001570/src/Principal/Main.java</file>
-            <file>file:/C:/Users/Natal/OneDrive/Documentos/NetBeansProjects/Proyecto1_202001570/src/AnalisJson/Parser.cup</file>
-            <file>file:/C:/Users/Natal/OneDrive/Documentos/NetBeansProjects/Proyecto1_202001570/src/AnalisJson/Parser.java</file>
-            <file>file:/C:/Users/Natal/OneDrive/Documentos/NetBeansProjects/Proyecto1_202001570/src/AnalisJson/Lexer.jflex</file>
+            <file>file:/C:/Users/Natal/OneDrive/Documentos/NetBeansProjects/Proyecto1_202001570/src/Analis/Lexer.jflex</file>
         </group>
     </open-files>
 </project-private>
