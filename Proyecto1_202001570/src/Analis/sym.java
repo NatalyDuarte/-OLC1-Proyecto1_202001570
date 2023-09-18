@@ -9,6 +9,7 @@ package Analis;
 public class sym {
   /* terminals */
   public static final int DOSPUNTOS = 46;
+  public static final int GRAFIP = 57;
   public static final int POR = 3;
   public static final int CHAR = 22;
   public static final int PUNTOYCOMA = 17;
@@ -37,7 +38,7 @@ public class sym {
   public static final int IF = 13;
   public static final int MAYORIGUAL = 35;
   public static final int EOF = 0;
-  public static final int VALORES = 57;
+  public static final int VALORES = 59;
   public static final int TRUE = 26;
   public static final int error = 1;
   public static final int COMA = 18;
@@ -58,6 +59,7 @@ public class sym {
   public static final int PARENTESIS_A = 7;
   public static final int DEFAULT = 47;
   public static final int COMENMULTILI = 30;
+  public static final int CORCHETE = 58;
   public static final int STRING = 24;
   public static final int NEWVALOR = 50;
   public static final int FALSE = 27;
@@ -124,6 +126,8 @@ public class sym {
   "TITULOY",
   "EJEX",
   "EJEY",
+  "GRAFIP",
+  "CORCHETE",
   "VALORES"
   };
 }

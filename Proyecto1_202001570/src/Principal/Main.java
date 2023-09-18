@@ -1,5 +1,9 @@
 package Principal;
-
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartFrame;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 /**
  *
  * @author Natal
@@ -14,6 +18,9 @@ public class Main {
         //analizadores("src/AnalisJson/", "Lexer.jflex", "Parser.cup");
         Principal m = new Principal();
         m.setVisible(true);
+        /*double [] valores = {12.1,19.1,91.2};
+        String [] ejex = {"Hoa", "Jua","JOA"};
+        func.Graficar.barras("Prueba","Titulox", "Tituloy", valores, ejex);*/
     }
     public static void analizadores(String ruta, String jflexFile, String cupFile){
         try {

@@ -4,7 +4,7 @@ package Analis;
 import java_cup.runtime.*;
 import java.util.LinkedList;
 import Principal.*;
-
+import func.*;
 
 //------> Codigo para el parser
 //------> Declaracion de variables, funciones y funciones de error
@@ -49,7 +49,8 @@ terminal String MAYOR,MENOR,MAYORIGUAL,MENORIGUAL,IGUALIGUAL,CERO;
 terminal String AND, OR, NOT,DO;
 terminal String SWITCH,CASE,BREAK,DOSPUNTOS,DEFAULT;
 terminal String DEFIGLO,DOLAR,NEWVALOR,GRAFIB;
-terminal String TITULO,TITULOX,TITULOY,EJEX,EJEY,VALORES; 
+terminal String TITULO,TITULOX,TITULOY,EJEX,EJEY,GRAFIP; 
+terminal String CORCHETE,VALORES; 
 
 //------> Declaración de no terminales
 non terminal inicio;
@@ -62,8 +63,9 @@ non terminal declaracha ,declaraigcha;
 non terminal declarabol ,declaraigbol;
 non terminal declaracade ,declaraigcade,declararfas;
 non terminal grafibarras, stringb,maind,do,funcion,declaraigdounew;
-non terminal ejex,proba;
-
+non terminal ejex,stringtitux,stringtituy,grafipie;
+non terminal switch,case,break,default;
+non terminal expres,valores;
 
 // ------> Precedencia
 precedence left MAS;
@@ -126,7 +128,125 @@ instruccion ::= instr_mostrar:val {: RESULT = val; :}
     | grafibarras:val {: RESULT = val; :}
     | stringb:val {: RESULT = val; :}
     | ejex:val {: RESULT = val; :}
+    | stringtitux:val  {: RESULT = val; :}
+    | stringtituy:val  {: RESULT = val; :}
+    | grafipie:val {: RESULT = val; :}
+    | switch:val {: RESULT = val; :}
+    | case:val {: RESULT = val; :}
+    | break:val {: RESULT = val; :}
+    | default:val {: RESULT = val; :}
+    | expres:val {: RESULT = val; :}
+    | valores:val {: RESULT = val; :}
+;
+valores ::= DOUBLE CORCHETE VALORES IGUAL LLAVE_A lista_instr:inst LLAVE_C PUNTOYCOMA 
+            {: 
+                LinkedList<String> lista = new LinkedList<>();
+                lista.add("double [] Valores = {"); 
+                lista.addAll(inst);
+                Graficar.valoress.addAll(inst);
+                lista.add("};\n"); 
+                RESULT = lista;
+            :}
+;
+expres::= CADENA:val COMA
+            {: 
+                LinkedList<String> lista = new LinkedList<>();
+                lista.add(val.toString()+", "); 
+                RESULT = lista;
+            :}
+    | CADENA:val
+            {: 
+                LinkedList<String> lista = new LinkedList<>();
+                lista.add(val.toString()+" "); 
+                RESULT = lista;
+            :}
+    | IDENTI:val COMA
+            {: 
+                LinkedList<String> lista = new LinkedList<>();
+                lista.add(val.toString()+", "); 
+                RESULT = lista;
+            :}
+    | IDENTI:val
+            {: 
+                LinkedList<String> lista = new LinkedList<>();
+                lista.add(val.toString()+" "); 
+                RESULT = lista;
+            :}
+    |DOUBLEN:val COMA
+            {: 
+                LinkedList<String> lista = new LinkedList<>();
+                lista.add(val.toString()+", "); 
+                RESULT = lista;
+            :}
+    | DOUBLEN:val
+            {: 
+                LinkedList<String> lista = new LinkedList<>();
+                lista.add(val.toString()+" "); 
+                RESULT = lista;
+            :}
+    | DOLAR LLAVE_A NEWVALOR COMA expresion:cade COMA expresion:cades LLAVE_C COMA
+            {: 
+                LinkedList<String> lista = new LinkedList<>();
+                lista.add("${NewValor, "+cade+", "+cades+" },"); 
+                RESULT = lista;
+            :}
+    | DOLAR LLAVE_A NEWVALOR COMA expresion:cade COMA expresion:cades LLAVE_C
+            {: 
+                LinkedList<String> lista = new LinkedList<>();
+                lista.add("${NewValor, "+cade+", "+cades+" }"); 
+                RESULT = lista;
+            :}
+;
+ejex ::= STRING CORCHETE EJEX IGUAL LLAVE_A lista_instr:inst LLAVE_C PUNTOYCOMA 
+            {: 
+                LinkedList<String> lista = new LinkedList<>();
+                lista.add("String [] ejex = {"); 
+                lista.addAll(inst); 
+                lista.add("};\n");
+                Graficar.ejexs.addAll(inst);
+                RESULT = lista;
+            :}
+;
+default ::= DEFAULT DOSPUNTOS
+        {:
+        LinkedList<String> lista = new LinkedList<>();
+        lista.add(" :");
 
+        RESULT = lista;
+    :}
+;
+break ::= BREAK PUNTOYCOMA
+        {:
+        LinkedList<String> lista = new LinkedList<>();
+        lista.add("\n");
+
+        RESULT = lista;
+    :}
+;
+
+case ::= CASE expresion:cades DOSPUNTOS
+        {:
+        LinkedList<String> lista = new LinkedList<>();
+        lista.add(cades+ " :");
+
+        RESULT = lista;
+    :}
+;
+
+switch ::= SWITCH PARENTESIS_A expresion:exp PARENTESIS_C LLAVE_A lista_instr:inst LLAVE_C 
+    {:
+        LinkedList<String> lista = new LinkedList<>();
+        lista.add("def switch (case, "+ exp + "):\n");
+        lista.add("switcher = {\n");
+
+        func.Funcion.contador++;
+        lista.addAll(func.Funcion.tabulaciones(inst));
+        func.Funcion.contador--;
+        
+        lista.add("}\n");
+
+        RESULT = lista;
+    :}
 ;
 
 grafibarras ::= VOID GRAFIB PARENTESIS_A PARENTESIS_C LLAVE_A lista_instr:inst LLAVE_C 
@@ -141,14 +261,42 @@ grafibarras ::= VOID GRAFIB PARENTESIS_A PARENTESIS_C LLAVE_A lista_instr:inst L
     :}
 ;
 
+grafipie ::= VOID GRAFIP PARENTESIS_A PARENTESIS_C LLAVE_A lista_instr:inst LLAVE_C 
+    {: 
+    LinkedList<String> lista = new LinkedList<>();
+    lista.add("void GraficaPie(){\n");
+    lista.addAll(inst);
+    lista.add("\n");
+    lista.add("}\n");
+    func.Funcion.funciones.addAll(inst);
+    RESULT = lista;
+    :}
+;
+
 stringb ::= STRING TITULO IGUAL expresion:cades PUNTOYCOMA 
             {: 
                 LinkedList<String> lista = new LinkedList<>();
-                lista.add("string titulo = "+cades.toString()+";\n"); 
+                lista.add("string titulo = "+cades.toString()+";\n");
+                Graficar.Titulo = cades.toString();
                 RESULT = lista;
             :}
 ;
-
+stringtitux ::= STRING TITULOX IGUAL expresion:cades PUNTOYCOMA 
+            {: 
+                LinkedList<String> lista = new LinkedList<>();
+                lista.add("string titulox = "+cades.toString()+";\n"); 
+                Graficar.TituloX = cades.toString();
+                RESULT = lista;
+            :}
+;
+stringtituy ::= STRING TITULOY IGUAL expresion:cades PUNTOYCOMA 
+            {: 
+                LinkedList<String> lista = new LinkedList<>();
+                lista.add("string tituloy = "+cades.toString()+";\n");
+                Graficar.TituloY = cades.toString();
+                RESULT = lista;
+            :}
+;
 
 
 funcion ::= VOID DEFIGLO PARENTESIS_A PARENTESIS_C LLAVE_A lista_instr:inst LLAVE_C 
@@ -159,6 +307,7 @@ funcion ::= VOID DEFIGLO PARENTESIS_A PARENTESIS_C LLAVE_A lista_instr:inst LLAV
     lista.add("\n");
     lista.add("}\n");
     func.Funcion.funciones.addAll(inst);
+    func.Graficar.funciones.addAll(inst); 
     RESULT = lista;
     :}
 ;
@@ -167,6 +316,8 @@ declaraigdounew ::= DOUBLE expresion:val IGUAL DOLAR LLAVE_A NEWVALOR COMA expre
             {: 
                 LinkedList<String> lista = new LinkedList<>();
                 lista.add("double "+val.toString()+" = ${ NewValor, "+cade.toString()+","+cades.toString()+" };\n"); 
+                Graficar instancia = new Graficar();
+                instancia.AgregarDo(val.toString(),"${ NewValor, "+cade.toString()+","+cades.toString()+" }");
                 RESULT = lista;
             :}
 ;
@@ -303,6 +454,8 @@ declaraigdou ::= DOUBLE expresion:exp IGUAL expresion:val PUNTOYCOMA
             {: 
                 LinkedList<String> lista = new LinkedList<>();
                 lista.add(exp+"="+val+"\n"); 
+                Graficar instancia = new Graficar();
+                instancia.AgregarD(exp.toString(),val.toString());
                 RESULT = lista;
             :}
 ;
@@ -346,6 +499,8 @@ declaraigcade ::= STRING expresion:exp IGUAL expresion:val PUNTOYCOMA
             {: 
                 LinkedList<String> lista = new LinkedList<>();
                 lista.add(exp+"="+val+"\n"); 
+                Graficar instancia = new Graficar();
+                instancia.AgregarS(exp.toString(),val.toString());
                 RESULT = lista;
             :}
 ;

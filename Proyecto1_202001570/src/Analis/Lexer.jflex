@@ -39,8 +39,6 @@ FIN_LINEA = \r|\n|\r\n
 INPUT = [^\r\n]
 comentariolinea = \/+{INPUT}* {FIN_LINEA} ?
 comentariomultilinea = \/\*[\s\S]*?\*\/
-corcha = \[
-corchc = \]
 
 %%
 // ------------  Reglas Lexicas -------------------
@@ -50,6 +48,7 @@ corchc = \]
 "-"             {AgregarToken( yytext(),"MENOS",yyline, yycolumn);return new Symbol(sym.MENOS, yycolumn, yyline, yytext());}
 " /"            {AgregarToken( yytext(),"DIVISION",yyline, yycolumn);return new Symbol(sym.DIVISION, yycolumn, yyline, yytext());}
 
+"\[\]"          {AgregarToken( yytext(),"CORCHETE",yyline, yycolumn);return new Symbol(sym.CORCHETE, yycolumn, yyline, yytext());}
 "("             {AgregarToken( yytext(),"PARENTESIS_A",yyline, yycolumn);return new Symbol(sym.PARENTESIS_A, yycolumn, yyline, yytext());}
 ")"             {AgregarToken( yytext(),"PARENTESIS_C",yyline, yycolumn);return new Symbol(sym.PARENTESIS_C, yycolumn, yyline, yytext());}
 "{"             {AgregarToken( yytext(),"LLAVE_A",yyline, yycolumn);return new Symbol(sym.LLAVE_A, yycolumn, yyline, yytext());}
@@ -93,6 +92,7 @@ corchc = \]
 "ejex"                {AgregarToken( yytext(),"EJEX",yyline, yycolumn);return new Symbol(sym.EJEX, yycolumn, yyline, yytext());}
 "ejey"                {AgregarToken( yytext(),"EJEY",yyline, yycolumn);return new Symbol(sym.EJEY, yycolumn, yyline, yytext());}
 "valores"             {AgregarToken( yytext(),"VALORES",yyline, yycolumn);return new Symbol(sym.VALORES, yycolumn, yyline, yytext());}
+"graficapie"          {AgregarToken( yytext(),"GRAFIP",yyline, yycolumn);return new Symbol(sym.GRAFIP, yycolumn, yyline, yytext());}
 
 "0"             {AgregarToken( yytext(),"CERO",yyline, yycolumn);return new Symbol(sym.CERO, yycolumn, yyline, yytext());}
 "&&"            {AgregarToken( yytext(),"AND",yyline, yycolumn);return new Symbol(sym.AND, yycolumn, yyline, yytext());}

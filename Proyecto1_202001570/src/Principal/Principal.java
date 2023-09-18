@@ -80,6 +80,8 @@ public class Principal extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
+        jButton11 = new javax.swing.JButton();
+        jButton12 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -381,6 +383,26 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
+        jButton11.setBackground(new java.awt.Color(102, 102, 102));
+        jButton11.setFont(new java.awt.Font("Bodoni MT Black", 0, 24)); // NOI18N
+        jButton11.setForeground(new java.awt.Color(0, 255, 255));
+        jButton11.setText("Grafica Pie");
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
+
+        jButton12.setBackground(new java.awt.Color(102, 102, 102));
+        jButton12.setFont(new java.awt.Font("Bodoni MT Black", 0, 24)); // NOI18N
+        jButton12.setForeground(new java.awt.Color(0, 255, 255));
+        jButton12.setText("Grafica Barras");
+        jButton12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton12ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -388,6 +410,8 @@ public class Principal extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(255, 255, 255)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton11)
+                    .addComponent(jButton12)
                     .addComponent(jButton6)
                     .addComponent(jButton5))
                 .addContainerGap(262, Short.MAX_VALUE))
@@ -397,9 +421,13 @@ public class Principal extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(115, 115, 115)
                 .addComponent(jButton5)
-                .addGap(94, 94, 94)
+                .addGap(35, 35, 35)
                 .addComponent(jButton6)
-                .addContainerGap(277, Short.MAX_VALUE))
+                .addGap(44, 44, 44)
+                .addComponent(jButton12)
+                .addGap(41, 41, 41)
+                .addComponent(jButton11)
+                .addContainerGap(181, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Reporte", jPanel2);
@@ -545,6 +573,12 @@ public class Principal extends javax.swing.JFrame {
             jTextArea2.append(valor);
             System.out.println(valor);
         });
+        func.Graficar.funciones.forEach((valor) -> {
+            System.out.println(valor);
+        });
+        System.out.println(func.Graficar.Titulo);
+        func.Graficar.pasareje();
+        func.Graficar.pasarval();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -638,6 +672,14 @@ public class Principal extends javax.swing.JFrame {
             System.err.println("Error al guardar el archivo.");
         }
     }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+         func.Graficar.Pie();
+    }//GEN-LAST:event_jButton11ActionPerformed
+
+    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
+        func.Graficar.barras();
+    }//GEN-LAST:event_jButton12ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -962,6 +1004,8 @@ public class Principal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton11;
+    private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
